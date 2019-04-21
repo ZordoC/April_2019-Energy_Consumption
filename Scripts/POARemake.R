@@ -4,6 +4,13 @@ library(lubridate)
 library(ggplot2)
 library(reshape2)
 
+# library(rstudioapi)
+# current_path=getActiveDocumentContext()$path
+# setwd(dirname(current_path))
+# setwd("..")
+# rm(current_path)
+
+
 con = dbConnect(MySQL(), user='deepAnalytics', password='Sqltask1234!', dbname='dataanalytics2018', 
                 host='data-analytics-2018.cbrosir2cswx.us-east-1.rds.amazonaws.com')
 
@@ -80,13 +87,15 @@ WeekM3 <- FullYears  %>% select(Sub_metering_3,week.month) %>% group_by(week.mon
 
 
 
-Test <- FullYears %>% select(hour,minute) %>%  
+FullYears <- FullYears %>% mutate(Price = ifelse(hour >= 7 & hour <= 21,0.1580/60,
+                       ifelse(hour == 6 & minute >= 30  | hour == 22 & minute <= 30 ,0.1580/60,0.1230/60)))
 
-6 <  h  < 22 
 
-FullYears <- FullYears %>% mutate(Price = ifelse(hour >= 7 & hour <= 21,0.1580,
-                       ifelse(hour == 6 & minute >= 30  | hour == 22 & minute <= 30 ,0.1580,0.1230)))
-  
+
+P = E / Time  
+
+E = P*time
+
   
   
 

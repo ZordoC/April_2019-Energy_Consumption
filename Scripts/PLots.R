@@ -14,6 +14,34 @@ ggplot(Subset_1, aes(x = Time, y = Data)) +
   geom_smooth(data = Subset_3, aes(x = Time, y = Data), col = "green")
 
 
+
+Y <- FullYears %>% group_by(month) %>% summarise( Kitchen = sum(Sub_metering_1), Laundry = sum(Sub_metering_2),
+                  WaterHeater_AirConditioner =sum(Sub_metering_3))  %>% melt(id='month')
+
+
+mymonths <- c("Jan","Feb","Mar",
+                             "Apr","May","Jun",
+                             "Jul","Aug","Sep",
+                             "Oct","Nov","Dec")
+              
+Y$month <- mymonths[Y$month]
+
+colnames(Y)[3] <-"Total Watts"
+
+
+
+
+ggplot(Y,aes(x=month,y=`Total Watts`,fill=variable)) + geom_bar(stat ="identity",position=position_stack(reverse = TRUE)) + 
+  xlab("Months") 
+
+
+
+
+  plot(FullYears$Global_active_power ~ FullYears$DateTime, ylab = "Global Active Power (kilowatts)", xlab = "", type = "l")
+
+
+
+
 # 
 # 
 # ggplot(MonthM1,aes(x=month,y=TotalWatts)) + geom_bar(stat = "identity")
@@ -53,36 +81,6 @@ ggplot(Subset_1, aes(x = Time, y = Data)) +
 # ggplot(MonthM1,aes(x=month,y=TotalWatts)) + geom_bar(stat = "identity",fill='yellow') + geom_bar(data=MonthM2,stat = 'identity',fill='red')
 # 
 # 
-
-
-
-
-Y <- FullYears %>% group_by(month) %>% summarise( Kitchen = sum(Sub_metering_1), Laundry = sum(Sub_metering_2),
-                  WaterHeater_AirConditioner =sum(Sub_metering_3))  %>% melt(id='month')
-
-Y$month <- mymonths[Y$month]
-
-colnames(Y)[3] <-"Total Watts"
-
-
-
-Y$month <- factor(Y$month,levels = c("Jan","Feb","Mar",
-                                                 "Apr","May","Jun",
-                                                 "Jul","Aug","Sep",
-                                                 "Oct","Nov","Dec"))
-
-
-
-ggplot(Y,aes(x=month,y=`Total Watts`,fill=variable)) + geom_bar(stat ="identity",position=position_dodge()) + 
-  xlab("Months") 
-
-
-
-
-
-
-
-
 
 
 
