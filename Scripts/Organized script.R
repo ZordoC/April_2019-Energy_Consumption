@@ -10,20 +10,32 @@ library(opera)
 library(forecastHybrid)
 
 
+##### $$$$ #####
 
 monthly_data <-  granularity(FullYears,Global_active_power,year,month)
 
 monthly_data_ts <-  ts(monthly_data$Total_Cost,frequency=12,start = c(2007,1))
 
-
 sets <- train_test_sets(monthly_data_ts,c(2007,1),c(2009,12),c(2010,1),c(2010,11))
-
 
 models <- c("holtwinters","autoarima","ets")
 
 sets$my_train
-
+0
 
 l <- all_forecasts(models,sets$my_train,11)
+
+y <- cbind(l[[1]]$mean,l[[2]]$mean,l[[3]]$mean)
+
+colnames(y) <- c("Holt-Winters","Auto-Arima","ETS")
+
+for( i in 1:length(models))
+  {
+
+  checkresiduals(l[[i]])
+
+}
+
+a <- accuracy(l[[1]],sets$my_test)
 
 
