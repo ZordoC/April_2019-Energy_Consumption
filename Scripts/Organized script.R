@@ -3,42 +3,27 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(reshape2)
+library(ggfortify)
+library(forecast)
+library(tseries)
+library(opera)
+library(forecastHybrid)
 
 
 
+monthly_data <-  granularity(FullYears,Global_active_power,year,month)
 
-Gfunction(FullYears,year,Global_active_power)
-
-
-
+monthly_data_ts <-  ts(monthly_data$Total_Cost,frequency=12,start = c(2007,1))
 
 
-
-#### Energy ####
-Total.Energy.Ammount.Month <-FullYears %>% group_by(month) %>% summarise(Globalenergry = sum(Global_active_power))
-
-Total.Energy.Ammount.Weeks <- FullYears %>% group_by(weekdays(FullYears$DateTime)) %>% summarise(Globalenergry = sum(Global_active_power))
-
-TotalE.kitchen <- FullYears %>% group_by(month) %>% summarise(Kitchen.KwH = sum(Kitchen/(1000))) 
-
-TotalE.Laundry <- FullYears %>% group_by(month) %>% summarise(Kitchen.KwH = sum(LaundryRoom/(1000))) 
+sets <- train_test_sets(monthly_data_ts,c(2007,1),c(2009,12),c(2010,1),c(2010,11))
 
 
-#### Money ####
-Total.Money.Hour <- FullYears %>% group_by(year) %>% summarise(Total)
+models <- c("holtwinters","autoarima","ets")
 
-Total.Money.Month <- FullYears   %>% group_by(month) %>% summarise(TotalMoney = sum(Price*Global_active_power/(60) ))
-
-Total.Money.Week <- FullYears  %>% group_by(week) %>% summarise(TotalMoney = sum(Price*Global_active_power/60) )
-
-Total.Money.Hour <- FullYears %>%  group_by(hour) %>% summarise(TotalMoney = sum(Price*Global_active_power/60))
+sets$my_train
 
 
-
-Average.Money.Month <- FullYears   %>% group_by(month) %>% summarise(TotalMoney = sum(Price*Global_active_power/(60*3) ))
-
-Total.Money.WeekDay <- FullYears %>% group_by(weekdays(FullYears$DateTime)) %>% summarise(MoneySpentOnAverage = sum(Price*Global_active_power/(60*53*3)))
+l <- all_forecasts(models,sets$my_train,11)
 
 
-
-ggplot(Total.Money.Month,aes(x=))

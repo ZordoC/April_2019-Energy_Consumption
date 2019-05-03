@@ -3,7 +3,10 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(reshape2)
-##### Query Data ####
+library(tidyr)
+library(padr)
+
+ ##### Query Data ####
 
 con = dbConnect(MySQL(), user='deepAnalytics', password='Sqltask1234!', dbname='dataanalytics2018', 
                 host='data-analytics-2018.cbrosir2cswx.us-east-1.rds.amazonaws.com')
@@ -21,9 +24,9 @@ Year09 <- dbGetQuery(con,"SELECT * FROM yr_2009")
 Year10 <- dbGetQuery(con,"SELECT * FROM yr_2010")
 
 
-#### Pre-Process ####
+#### Pre-Process #### 
 
-FullYears <- bind_rows(Year07,Year08,Year09)
+FullYears <- bind_rows(Year07,Year08,Year09,Year10)
 
 FullYears <-cbind(FullYears,paste(FullYears$Date,FullYears$Time), stringsAsFactors=FALSE)
 
@@ -33,33 +36,27 @@ FullYears <- FullYears[,c(ncol(FullYears), 1:(ncol(FullYears)-1))]
 
 FullYears$DateTime <- as.POSIXct(FullYears$DateTime, "%Y/%m/%d %H:%M:%S")
 
-attr(FullYears$DateTime, "tzone") <- "Europe/Paris"
+# attr(FullYears$DateTime, "tzone") <- "Europe/Paris"
+
+FullYears <- pad(FullYears,break_above =  3)
 
 
-FullYears <- AddYearsAndPriceFunction(FullYears)
+FullYears[is.na(FullYears)] <- 0
 
 
+
+#### The Data-Sets ####
+
+FullYears <- pre_function(FullYears)
+
+
+# FullYears <- change_names(FullYears)
 
 # FullYears <-ConversionFunction(FullYears)
 
-
-#FullYears$residuals <- FullYears$Global_active_power - FullYears$Kitchen - FullYears$LaundryRoom - FullYears$HeatingAirdcondioner
-
-# MonthM1 <- FullYears %>% select(Sub_metering_1,month) %>% group_by(month) %>% summarise( TotalWatts = sum(Sub_metering_1))
+#### Longformat #### 
+# FullYears_tidy <- FullYears %>%
+#                   gather(Meter, KWatt_hr, `Kitchen`, `LaundryRoom`, `Heat`)  %>%  factor(FullYears_tidy$Meter)
 # 
-# MonthM2 <- FullYears %>% select(Sub_metering_2,month) %>% group_by(month) %>% summarise( TotalWatts = sum(Sub_metering_2))
 # 
-# MonthM3 <- FullYears %>% select(Sub_metering_3,month) %>% group_by(month) %>% summarise( TotalWatts = sum(Sub_metering_3))
-# 
-# YearM1 <- FullYears %>% select(Sub_metering_1,year) %>% group_by(year) %>% summarise( Total_Watts = sum(Sub_metering_1))
-# 
-# YearM2 <- FullYears %>% select(Sub_metering_2,year) %>% group_by(year) %>% summarise( Total_Watts = sum(Sub_metering_2))
-# 
-# YearM3 <- FullYears %>% select(Sub_metering_3,year) %>% group_by(year) %>% summarise( Total_Watts = sum(Sub_metering_3))
-# 
-# WeekM1 <- FullYears %>% select(Sub_metering_1,week.month) %>% group_by(week.month) %>% summarise( Total_Watts = sum(Sub_metering_1))
-# 
-# WeekM2 <- FullYears  %>% select(Sub_metering_2,week.month) %>% group_by(week.month) %>% summarise( Total_Watts = sum(Sub_metering_2))
-# 
-# WeekM3 <- FullYears  %>% select(Sub_metering_3,week.month) %>% group_by(week.month) %>% summarise( Total_Watts = sum(Sub_metering_3))
-
+# FullYears_tidy <- pre_function(FullYears_tidy)
