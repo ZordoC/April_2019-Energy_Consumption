@@ -95,63 +95,30 @@ adf.test(diff_train3)
 
 
 compare_diff_models <- function(train,h,model1,model2,model3,model4)
-{
-M1 <- train %>% 
+¨¨
+ETS <- train %>% 
   model1() %>%
   forecast(h)
 
-M2 <- train %>% 
-  model2() %>%
+ARIMA <- my_train %>% 
+  auto.arima() %>%
     forecast(h)
 
-M3 <- train %>% 
-  model3(h)
-
-M4 <- train %>% 
-      model4() %>%
-        forecast(h)
-
-
-}
-
-model_training_forecasting <-  function(train,h,model) 
-{
-  if(model == 'holtwinters') 
-  {
-    m <- hw(train,seasonal = "additive",h = h)  
-  }
-  else if(model == "autoarima")
-  {
-    m <- auto.arima(train) %>%
-      forecast(h)
-  }
-  else if (model == "ets")
-  {
-    m <-ets(train) %>%
-      forecast(h)
-  } 
-  m
-}
-
-
-
-
-hw(my_train,seasonal = 'additive',h = 11 )
-
-hw(my_train,seasonal = 'additive')
-
+STL <- my_train %>% 
+  stlf(h)
 
 
 autoplot(my_train)
 
 HW <- L$
 
-  m <- HoltWinters(L$my_train,seasonal = "additive")
 
 stl1 <- my_train %>%  
       stlf(method = 'arima',12)
 
 three_model_forecasts <- cbind(ETS=ETS$mean, ARIMA=ARIMA$mean, STL=STL$mean)
+
+
 
 df <- cbind(my_test, X)
 
@@ -231,6 +198,15 @@ accuracy(fc1,my_test)
 
 accuracy(fc2,my_test)
   
+
+
+
+
+
+
+
+
+
 # #### Energy ####
 # total_energy_ammount_month <-FullYears %>% group_by(month) %>% summarise(Globalenergry = sum(Global_active_power))
 # 

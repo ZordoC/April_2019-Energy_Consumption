@@ -84,7 +84,30 @@ all_forecasts <- function(models,train,h)
   l
 }
 
+accuracy_function <-  function(forecasts,test)
+{
+  c <- list()
+  for (i in 1:length(forecasts))
+  {
+    c[[i]] <- as.data.frame(accuracy(forecasts[[i]],test))
+  }
+  
+ c
+  
+}  
 
+
+
+error_function <- function(acclist,metric,models =  c("holtwinters","ets","autoarima"))
+{
+  b <- c()
+  
+  for( i in 1:3)
+  {
+    b <- cbind(b,acclist[[i]]$metric) 
+  }
+    b
+}
 
 
 ##### Optional/Fun functions ####
