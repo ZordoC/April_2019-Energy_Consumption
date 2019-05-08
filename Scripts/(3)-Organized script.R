@@ -109,7 +109,10 @@ Ma <-as.data.frame(accuracy(fc1$mean,sets$my_test))
 
 Ma2 <-as.data.frame(accuracy(fc2$mean,sets$my_test))
 
-tests[c("Mixture1"), ] <- Ma$MAPE
+tests[c("Mixture2"), ] <- Ma$MAPE
 tests[c("Mixture3"), ] <- Ma2$MAPE
+
+tests
+
 
 
