@@ -10,6 +10,8 @@ library(opera)
 library(forecastHybrid)
 install.packages('pacman')
 
+
+
 ##### $$$$ #####
 
 monthly_data <-  granularity(FullYears,Global_active_power,year,month)
@@ -83,4 +85,14 @@ rownames(f_mape) <- c("Mixture")
 
 bind_rows(tests,f_mape)
 
-f_mape
+##### ForecastHybrid Method
+
+library(forecastHybrid)
+
+
+fit1 <- hybridModel(train, weights="equal")
+
+fit2 <- hybridModel(train, weights="insample")
+
+
+

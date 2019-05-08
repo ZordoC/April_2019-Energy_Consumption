@@ -41,13 +41,21 @@ FullYears$DateTime <- as.POSIXct(FullYears$DateTime, "%Y/%m/%d %H:%M:%S")
 FullYears <- pad(FullYears,break_above =  3)
 
 
-FullYears[is.na(FullYears)] <- 0
-
-
-
 #### The Data-Sets ####
 
 FullYears <- pre_function(FullYears)
+
+
+na_check_test_set <-FullYears %>% filter(year == 2008)  
+
+sum(is.na(na_check_test_set))
+
+na_check_test_set[which(TRUE),] # No NA'S on test-set ! great ! 
+
+
+library(zoo)
+
+FullYears <- lapply(FullYears, na.aggregate)
 
 
 # FullYears <- change_names(FullYears)
