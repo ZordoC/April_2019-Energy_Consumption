@@ -8,7 +8,7 @@ library(forecast)
 library(tseries)
 library(opera)
 library(forecastHybrid)
-install.packages('pacman')
+#install.packages('pacman')
 
 
 
@@ -41,10 +41,12 @@ rownames(b) <-  c("Train","Test")
 
 colnames(b) <- c("HoltWinters","ETS","Auto-Arima")
 
-b <- as.data.frame(b)
+mape_of_all_models <- as.data.frame(b)
 
 
 ##### Combining all models ####
+
+#opera method
 
 df <- cbind(sets$my_test, forecasts_mean_together)
 
@@ -63,12 +65,11 @@ df <- cbind(z,sets$my_test)
 
 colnames(df) <- c("Data","Mixture")
 
-# autoplot(df) +
-#   xlab("Year") + ylab("Power Consumption")
-
 f <- as.data.frame(accuracy(z,sets$my_test))
 
 f_mape <- as.data.frame(f$MAPE) 
+
+tests <- c()
 
 for (i in 1:3) 
 {
@@ -83,16 +84,32 @@ rownames(tests) <-  c("Holt-Winters","ETS","Auto-Arima")
 
 rownames(f_mape) <- c("Mixture")
 
-bind_rows(tests,f_mape)
+tests[4, ] <-  f_mape
 
+colnames(tests) <- c("MAPE")
+
+tests
 ##### ForecastHybrid Method
 
 library(forecastHybrid)
 
 
-fit1 <- hybridModel(train, weights="equal")
+fit1 <- hybridModel(sets$my_train, weights="equal")
 
-fit2 <- hybridModel(train, weights="insample")
+fit2 <- hybridModel(sets$my_train, weights="insample")
 
+
+fc1 <- forecast(fit1,h=11)
+
+fc2 <- forecast(fit2,h=11)
+
+accuracy(fc1$mean,sets$my_test) 
+
+Ma <-as.data.frame(accuracy(fc1$mean,sets$my_test))
+
+Ma2 <-as.data.frame(accuracy(fc2$mean,sets$my_test))
+
+tests[c("Mixture1"), ] <- Ma$MAPE
+tests[c("Mixture3"), ] <- Ma2$MAPE
 
 

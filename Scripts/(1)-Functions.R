@@ -28,7 +28,7 @@ conversion_function <- function(data)
   data$LaundryRoom <- data$LaundryRoom / 1000
   data$Heat <- data$Heat / 1000
   data$Global_active_power <- data$Global_active_power / 60 
-  data$residuals <- data$Global_active_power - data$Kitchen - data$LaundryRoom - data$Heat
+  data$Rest_of_the_house <- data$Global_active_power - data$Kitchen - data$LaundryRoom - data$Heat
   data$Cost <- data$Global_active_power * data$Price
   data
 }
@@ -92,7 +92,7 @@ accuracy_function <-  function(forecasts,test)
     c[[i]] <- as.data.frame(accuracy(forecasts[[i]],test))
   }
   
- c
+  c
   
 }  
 
@@ -106,7 +106,7 @@ error_function <- function(acclist,metric,models =  c("holtwinters","ets","autoa
   {
     b <- cbind(b,acclist[[i]]$metric) 
   }
-    b
+  b
 }
 
 
@@ -136,7 +136,7 @@ metrics_of_total_power <- function(df, var1, var2)
 {
   var1 <-  enquo(var1)
   var2 <-  enquo(var2)
-    df %>%
+  df %>%
     group_by(!!var1) %>%
     summarise(Total = sum(!!var2),
               mean = mean(!!var2),
