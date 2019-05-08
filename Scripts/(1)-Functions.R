@@ -16,7 +16,7 @@ pre_function <-  function(data,hi = 6, mi = 30 ,hf = 22,mf=30,Pday = 0.1580,Pnig
                                                  ,Pday,Pnight)))  %>% 
     rename( Kitchen = Sub_metering_1, LaundryRoom = Sub_metering_2, Heat = Sub_metering_3) %>%
     conversion_function()  
-  data <- data[ ,c("DateTime","Global_active_power","Kitchen","LaundryRoom","Heat","year","quarter","month","week","day","hour","minute","Price","Cost","residuals") ]
+  data <- data[ ,c("DateTime","Global_active_power","Kitchen","LaundryRoom","Heat","year","quarter","month","week","day","hour","minute","Price","Cost","Rest_of_the_house") ]
   data
 }
 

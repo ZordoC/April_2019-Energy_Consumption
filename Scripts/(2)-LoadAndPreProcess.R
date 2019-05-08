@@ -66,6 +66,6 @@ Full_Years_long <- FullYears %>%  melt(id.vars= -c(2,3,4,5,15))
 
 
 
-
 Full_Years_long_tableau <- Full_Years_long[,-c(2,3,4,5,6,7,8)] 
-# FullYears_tidy <- pre_function(FullYears_tidy)
+
+
